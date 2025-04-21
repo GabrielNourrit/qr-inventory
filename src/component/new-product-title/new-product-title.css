@@ -1,0 +1,21 @@
+
+
+#product-title{
+  font-size: 27px;
+  font-weight: bold;
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: white;
+}
+
+#product-title:focus{
+    outline: none;
+    border: none;
+}
+
+#product-title::placeholder
+ {
+    font-weight: 100;
+    color:#323232;
+}

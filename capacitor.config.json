@@ -1,0 +1,10 @@
+{
+  "appId": "com.gabrielnourrit.qrinventory",
+  "appName": "qr-inventory",
+  "webDir": "dist",
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": false
+    }
+  }
+}

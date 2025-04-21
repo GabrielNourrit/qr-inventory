@@ -1,0 +1,33 @@
+
+.title{
+  margin-bottom: 3vh;
+}
+
+.choix-n{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.checkbox-label{
+  font-size: 14px;
+  font-weight:300;
+  margin-right: 5px;
+}
+
+.checkbox{
+  width: 15px;
+  height: 15px;
+  border: 2px solid #9CB0F4;
+  border-radius: 100%;
+  margin-right:15px;
+}
+
+.checked{
+  background-color: #9CB0F4;
+}
+
+p{
+  margin: 0;
+}
