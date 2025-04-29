@@ -13,12 +13,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@capacitor/core": "latest",
+    "@capacitor-community/sqlite": "^7.0.0",
+    "@capacitor/android": "^7.2.0",
+    "@capacitor/barcode-scanner": "^2.0.3",
     "@capacitor/camera": "latest",
+    "@capacitor/core": "^7.2.0",
+    "@capacitor/ios": "^7.2.0",
     "@capacitor/splash-screen": "latest"
   },
   "devDependencies": {
-    "@capacitor/cli": "latest",
+    "@capacitor/cli": "^7.2.0",
     "vite": "^5.4.2"
   },
   "author": "",
