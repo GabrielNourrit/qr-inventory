@@ -11,6 +11,8 @@ PODS:
     - SQLCipher
     - ZIPFoundation
   - CapacitorCordova (7.2.0)
+  - CapacitorKeyboard (7.0.1):
+    - Capacitor
   - CapacitorSplashScreen (7.0.1):
     - Capacitor
   - OSBarcodeLib (1.1.3)
@@ -27,6 +29,7 @@ DEPENDENCIES:
   - "CapacitorCamera (from `../../node_modules/@capacitor/camera`)"
   - "CapacitorCommunitySqlite (from `../../node_modules/@capacitor-community/sqlite`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorSplashScreen (from `../../node_modules/@capacitor/splash-screen`)"
 
 SPEC REPOS:
@@ -46,20 +49,23 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor-community/sqlite"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorKeyboard:
+    :path: "../../node_modules/@capacitor/keyboard"
   CapacitorSplashScreen:
     :path: "../../node_modules/@capacitor/splash-screen"
 
 SPEC CHECKSUMS:
-  Capacitor: 106e7a4205f4618d582b886a975657c61179138d
-  CapacitorBarcodeScanner: 3c32ee7c4f7088cefb1abf1b83c10a11202190a8
-  CapacitorCamera: eb8687d8687fed853598ec9460d94bcd5e16babe
-  CapacitorCommunitySqlite: 6501e7349acf998346acf24ef757861bb3f6fc2b
+  Capacitor: 03bc7cbdde6a629a8b910a9d7d78c3cc7ed09ea7
+  CapacitorBarcodeScanner: 29c88bf098adb0830975d4f14c107a6bb7722e3d
+  CapacitorCamera: 6e73f1fc6c629a672658705a02409b60854bc0f1
+  CapacitorCommunitySqlite: b11e556cf5d149f9e0b6fbbb47959a6cd718c3d0
   CapacitorCordova: 5967b9ba03915ef1d585469d6e31f31dc49be96f
-  CapacitorSplashScreen: 19cd3573e57507e02d6f34597a8c421e00931487
+  CapacitorKeyboard: 09fd91dcde4f8a37313e7f11bde553ad1ed52036
+  CapacitorSplashScreen: 1d67815a422a9b61539c94f283c08ed56667c0fc
   OSBarcodeLib: f2e981270a64faf476cb790864262b29ab8cd68a
   SQLCipher: 908f846ca79d74be4e1776b3b86c6ad9e6c0b04f
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: ff56ab44f246686de9bcfaee98e7667e507a6b6a
+PODFILE CHECKSUM: 8d0012673dceb2df659190aeeb8100cc870cabea
 
-COCOAPODS: 1.15.0
+COCOAPODS: 1.16.2
