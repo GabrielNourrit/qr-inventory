@@ -5,14 +5,27 @@ const sqlite = new SQLiteConnection(CapacitorSQLite);
 let db;
 
 export const CategoryEnum = Object.freeze({
-  VIANDE: 0,
-  POISSON: 1,
-  LEGUMES: 2,
-  AUTRE: 3
+  VIANDE: 1,
+  POISSON: 2,
+  LEGUMES: 3,
+  PLAT: 4,
+  AUTRE: 5
 });
 
+export function getIdCategByType(type){
+  const normalizedType = type.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase();
+  const key = CategoryEnum[normalizedType];
+
+  if(key === undefined){
+      alert("Erreur ! Cette catégorie n'existe pas en base...");
+      throw new Error("Catégorie inconnue au bataillon ...");
+  }
+
+  return key;
+}
+
 export async function initDB() {
-  const dbName = 'inventory2.db';
+  const dbName = 'inventory8.db';
   const dbConn = await sqlite.createConnection(dbName, false, 'no-encryption', 1);
   await dbConn.open();
 
@@ -55,6 +68,16 @@ export async function initDB() {
   }
 }
 
+export async function productExistsByQRCode(qrCode) {
+  const result = await db.query(
+    'SELECT COUNT(*) AS count FROM products WHERE qr_code = ?',
+    [qrCode]
+  );
+
+  return result.values[0].count > 0;
+}
+
+
 async function addCategory(name) {
   // Ajout d'une catégorie
   await db.run('INSERT INTO categories (name) VALUES (?)', [name]);
@@ -72,35 +95,24 @@ export async function getAllProducts() {
     SELECT p.id, p.name, p.qr_code, p.quantity, c.name as category
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
+    WHERE p.quantity > 0
     `);
   return res.values;
 }
 
-export async function addQuantity(productId) {
+export async function addQuantityByQrCode(qrCode) {
   try {
-    const query = `UPDATE products SET quantity = quantity + 1 WHERE id = ?`;
-    const result = await db.execute(query, [productId]);
-    if (result.changes > 0) {
-      console.log(`Quantité du produit avec ID ${productId} augmentée.`);
-    } else {
-      console.log(`Aucun produit trouvé avec l'ID ${productId}.`);
-    }
+    const result = await db.execute("UPDATE products SET quantity = quantity + 1 WHERE qr_code = '"+qrCode+"'");
   } catch (error) {
     console.error("Erreur lors de l'ajout de la quantité :", error);
   }
 }
 
-export async function removeQuantity(productId) {
+export async function removeQuantityByQrCode(qrCode) {
   try {
-    const query = `UPDATE products SET quantity = quantity - 1 WHERE id = ? AND quantity > 0`;
-    const result = await db.execute(query, [productId]);
-    if (result.changes > 0) {
-      console.log(`Quantité du produit avec ID ${productId} réduite.`);
-    } else {
-      console.log(`Aucun produit trouvé avec l'ID ${productId} ou quantité déjà à 0.`);
-    }
+    const result = await db.execute("UPDATE products SET quantity = quantity - 1 WHERE qr_code = '"+qrCode+"' AND quantity > 0");
   } catch (error) {
-    console.error("Erreur lors du retrait de la quantité :", error);
+    console.error("Erreur lors de l'ajout de la quantité :", error);
   }
 }
 

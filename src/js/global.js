@@ -1,17 +1,14 @@
-
-//chargerPage("list-product");
-
 import { SplashScreen } from '@capacitor/splash-screen'
 import { CapacitorBarcodeScanner } from '@capacitor/barcode-scanner';
-import { initDB, CategoryEnum, addProduct, getAllProducts, checkTitleExists } from './db.js';
+import { initDB, CategoryEnum, addProduct, getAllProducts, checkTitleExists, getIdCategByType, productExistsByQRCode, addQuantityByQrCode, removeQuantityByQrCode } from './db.js';
 
 
 initDB().then(
 	()=>{
-
 		SplashScreen.hide();
-		noProduct();
-
+		getAllProducts().then((products) => {
+			(products.length === 0)?noProduct():listProduct();
+		});
 	});
 
 
@@ -51,7 +48,6 @@ async function titleProduct(qr){
 			// Vérifie si le titre existe en base
 			checkTitleExists(title).then(
 				(exists) => {
-					console.log("je suis ici morray");
 					if (exists) {
 						alert("Ce produit existe déjà !");
 						return;
@@ -76,25 +72,81 @@ async function categProduct(title, qr){
 			let label = $('.checkbox.checked').closest('.choix-n').find('.checkbox-label').text();
 			newProductResume(title, qr, label);
 		});
+
+		document.getElementById("btn-back").addEventListener("click", () => {
+			titleProduct(qr);
+		});
 	});
 }
 
 async function newProductResume(title, qr, type){
 	chargerPage("new-product-resume").then(() => {
-		let img = type.normalize("NFD")               // décompose les caractères accentués
-    	.replace(/[\u0300-\u036f]/g, '') // supprime les diacritiques (accents)
-    	.toLowerCase();
+		let img = computeCategory(type);
     	$('.translate-y-resume').attr('src', '../imgs/'+img+'.svg');
     	$("#product").html(title);
     	$("#type").html(type);
+
+    	$("#btn-next").click(function() {
+    		addProduct(title, qr, 1, getIdCategByType(type)).then(() => {
+    			listProduct();
+    		});
+    	});
+
+    	document.getElementById("btn-back").addEventListener("click", () => {
+    		categProduct(title,qr);
+    	});
     });
+}
+
+async function listProduct(){
+	console.log("je rentre");
+	chargerPage("list-product").then(() => {
+		getAllProducts().then((products) => {
+			if(products.length === 0){
+				noProduct();
+				return;
+			}
+			let productsHtml = "";
+			let greyRaw = false;
+
+			for (const product of products) {
+				productsHtml += beautifyProduct(product, greyRaw);
+				greyRaw = !greyRaw;
+			}
+			$("#products").html(productsHtml);
+		});
+		document.getElementById("scanAdd").addEventListener("click", () => {
+			scanToAdd().then((qr) => {
+				productExistsByQRCode(qr).then((res) => res?addQuantityByQrCode(qr).then(() => listProduct()):newProductInfo(qr));
+			});
+		});
+		document.getElementById("scanDelete").addEventListener("click", () => {
+			scanToAdd().then((qr) => {
+				productExistsByQRCode(qr).then((res) => res?removeQuantityByQrCode(qr).then(() => listProduct()):newProductInfo(qr));
+			});
+		});
+	});
+}
+
+function computeCategory(category){
+	return category.normalize("NFD")               // décompose les caractères accentués
+    	.replace(/[\u0300-\u036f]/g, '') // supprime les diacritiques (accents)
+    	.toLowerCase();
+}
+
+function beautifyProduct(product, greyRaw){
+	let greyRawHtml = "tab-row-grey";
+	return "<div class=\"tab-row "+(greyRaw?greyRawHtml:"")+"\">" +
+	"<div><img width=\"31px\" src=\"../imgs/"+computeCategory(product.category)+".svg\" />"+product.name+"</div>" +
+	"<div class=\"x-bold\">"+product.quantity+"</div>" +
+	"</div>";
 }
 
 async function noProduct(){
 	chargerPage("no-product").then(() => {
 		document.getElementById("scan").addEventListener("click", () => {
 			scanToAdd().then((qr) => {
-				newProductInfo(qr);
+				productExistsByQRCode(qr).then((res) => res?addQuantityByQrCode(qr).then(() => listProduct()):newProductInfo(qr));
 			});
 		});
 	});
