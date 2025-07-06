@@ -25,7 +25,9 @@ async function newProductInfo(qr){
 			titleProduct(qr);
 		});
 		document.getElementById("btn-back").addEventListener("click", () => {
-			noProduct();
+			getAllProducts().then((products) => {
+				(products.length === 0)?noProduct():listProduct();
+			});
 		});
 	});
 }
