@@ -25,7 +25,7 @@ export function getIdCategByType(type){
 }
 
 export async function initDB() {
-  const dbName = 'inventory8.db';
+  const dbName = 'inventory9.db';
   const dbConn = await sqlite.createConnection(dbName, false, 'no-encryption', 1);
   await dbConn.open();
 
