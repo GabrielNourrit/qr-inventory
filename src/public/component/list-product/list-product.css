@@ -60,10 +60,13 @@
 	width:100vw;
 	margin-bottom: 4vh;
 	display: flex;
-	justify-content: flex-end;
-	margin-right: calc(8vw - 10px);
+	justify-content: space-between;
 	position: absolute;
 	bottom: 0px;
+}
+
+#qr-codes > span {
+	margin-right: calc(8vw - 10px);
 }
 
 #qr-codes img{
@@ -71,6 +74,10 @@
 }
 
 #qr-codes > img{
+	margin-left: 8vw;
+}
+
+#qr-codes img{
 	margin-right: 10px;
 }
 
