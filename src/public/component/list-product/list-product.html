@@ -14,9 +14,21 @@
 
 <div id="qr-codes">
 	<img id="export" src="../imgs/export.svg"/>
-	<span>
-		<img id="scanDelete" src="../imgs/minus-qr-code.svg"/>
-		<img id="scanAdd" src="../imgs/add-qr-code.svg"/>
-	</span>
+	<img id="search" src="../imgs/search.svg"/>
+	<img id="scanDelete" src="../imgs/minus-qr-code.svg"/>
+	<img id="scanAdd" src="../imgs/add-qr-code.svg"/>
 </div>
 
+<div id="filter" class ="hide">
+	<select id="search-category">
+		<option value="0">Tous</option>
+		<option value="1">Viande</option>
+		<option value="2">Poisson</option>
+		<option value="3">Légumes</option>
+		<option value="4">Plat</option>
+		<option value="5">Autre</option>
+	</select>
+	<div id="btn">
+		<div id="btn-next">Filtrer</div>
+	</div>
+</div>

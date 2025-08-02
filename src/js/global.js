@@ -3,6 +3,7 @@ import { CapacitorBarcodeScanner } from '@capacitor/barcode-scanner';
 import { exportDatabaseToJson, initDB, CategoryEnum, addProduct, getAllProducts, checkTitleExists, getIdCategByType, productExistsByQRCode, addQuantityByQrCode, removeQuantityByQrCode } from './db.js';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Share } from '@capacitor/share';
+import { Toast } from '@capacitor/toast';
 
 initDB().then(
 	()=>{
@@ -103,23 +104,45 @@ async function newProductResume(title, qr, type){
 
 async function listProduct(){
 	chargerPage("list-product").then(() => {
+		let allProducts = [];
 		getAllProducts().then((products) => {
 			if(products.length === 0){
 				noProduct();
 				return;
 			}
-
-			let productsHtml = "";
-			let greyRaw = false;
-
-			for (const product of products) {
-				productsHtml += beautifyProduct(product, greyRaw);
-				greyRaw = !greyRaw;
-			}
-			$("#products").html(productsHtml);
+			renderProductsHTML(products);
+			allProducts = products;
 		});
+
 		document.getElementById("export").addEventListener("click", () => {
 			exportDatabaseToJson().then((res) => downloadJson(res));
+		});
+
+		document.getElementById("btn-next").addEventListener("click", () => {
+			let value = $("#search-category").val();
+			let label = $("#search-category option:selected").text();
+			let filtered = [];
+
+			if(value === '0'){
+				filtered = allProducts;
+			} else {
+				filtered = allProducts.filter(p => p.category == label);
+			}
+			
+			renderProductsHTML(filtered);
+			if (typeof Toast !== 'undefined' && Toast.show) {
+				Toast.show({
+					text: "Le filtre a bien été executé !",
+					duration: 'short',
+					position: 'bottom',
+				});
+			} else {
+				alert("Toast non défini");
+			}
+		});
+
+		document.getElementById("search").addEventListener("click", () => {
+			$("#filter").toggleClass("hide");
 		});
 		document.getElementById("scanAdd").addEventListener("click", () => {
 			scanToAdd().then((qr) => {
@@ -132,6 +155,16 @@ async function listProduct(){
 			});
 		});
 	});
+}
+
+function renderProductsHTML(products){
+	let productsHtml = "";
+	let greyRaw = false;
+	for (const product of products) {
+		productsHtml += beautifyProduct(product, greyRaw);
+		greyRaw = !greyRaw;
+	}
+	$("#products").html(productsHtml);
 }
 
 function computeCategory(category){
@@ -203,4 +236,5 @@ function computeCategory(category){
     		text: 'Voici ton export JSON',
     		url: uri,
     	});
+
     }
